@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charSet="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="applicable-device" content="mobile">
+    <title>{{title}}</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/app.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-fixed-top navbar-inverse">
+        <div class="container">
+            <div class="nav navbar-header">
+                <div class="navbar-brand">
+                    {{ homeTitle() }}
+                </div>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{urlpath('index')}}">博客首页</a></li>
+                    <li><a href="">分类</a></li>
+                    <li><a href="">个人简介</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if !hasLogin %}
+                    <li> <a href="{{ urlpath('login') }}">登录</a></li>
+                    {% else %}
+                    <li><a href="{{urlpath('article_publish')}}">发布文章</a></li>
+                    <li><a href="{{urlpath('logout')}}">退出</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    <div class="page">
+        <div class="container">
+            <div class="row">{% block container %}{% endblock %}</div>
+
+        </div>
+    </div>
+    {% include 'footer.html' %}
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+</body>
+
+</html>

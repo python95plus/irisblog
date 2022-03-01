@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block container %}
+<div class="col-md-9 col-sm-6">
+    <div class="box_white">
+        <ol class="breadcrumb">
+            <li><a href="/">首页</a></li>
+            <li><a href="#">{{ article.Category.Title }}</a></li>
+        </ol>
+        <div class="page-header">
+            <h1>{{article.Title}}</h1>
+            <div class="meta">
+                <span class="label label-default">发表时间：{{timestampToDate(article.CreatedTime, "2006-01-02")}}</span>
+                <span class="label label-primary">阅读次数：<span class="badge">{{ article.Views}}</span> 阅读</span>
+                {% if hasLogin %} <span class="label label-warning"><a href="{{ urlpath('article_publish') }}?id={{article.Id}}">编辑</a></span>{% endif %}
+            </div>
+        </div>
+        <div>
+            <p>{{article.ArticleData.Content|safe}}</p>
+        </div>
+        <p>
+            {% if prev %}
+            <span>上一篇：<a href="{{urlpath('article', prev.Id|stringformat:'%d')}}">{{prev.Title}}</a></span>
+            {% else %}
+            <span>没有了</span>
+            {% endif %}
+            {% if next %}
+            <span>下一篇：<a href="{{urlpath('article',next.Id|stringformat:'%d')}}">{{next.Title}}</a></span>
+            {% else %}
+            <span>没有了</span>
+            {% endif %}
+        </p>
+    </div>
+</div> 
+<div class="col-md-3 col-sm-6">
+    <div class="box_white">
+        {% include 'article/author.html' %}       
+    </div>    
+</div>
+
+{% endblock %}

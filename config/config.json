@@ -1,0 +1,15 @@
+{
+	"mysql": {
+		"database": "irisblog",
+		"user": "root",
+		"password": "",
+		"host": "localhost",
+		"port": 3306
+	},
+	"server": {
+		"site_name": "Iris Blog",
+		"env": "development",
+		"port": 8080,
+		"log_level": "debug"
+	}
+}

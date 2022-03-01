@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block container %}
+<link href="https://www.layuicdn.com/layui/css/layui.css" rel="stylesheet">
+<input type="hidden" name="id" id="id" value="{{ article.Id }}">
+    <div class="form-group" id="errors">
+    </div>
+    <div class="form-group">
+        <label for="title">文章标题:</label>
+        <input type="text" name="title" id="title" class="form-control" value="{{ article.Title }}">
+    </div>    
+    <div class="form-group">
+        <label for="category_name">文章分类</label>
+        <input type="text" name="category_name" class="form-control" list="categories" id="category_name" value="{{ article.Category.Title }}">
+        <datalist id="categories">
+            {% for item in categories %}
+            <option value="{{item}}"></option>
+            {% endfor %}
+        </datalist>
+    </div>
+    <div class="form-group">
+        <label for="keywords">关键词:</label>
+        <input type="text" name="keywords" id="keywords" class="form-control" value="{{article.Keywords}}" placeholder="多个关键词间用英文,隔开">
+    </div>
+    <div class="form-group">
+        <label for="description">文章描述:</label>
+        <textarea name="description" id="description" rows="" class="form-control">{{article.Description}}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="text-editor">文章内容:</label>
+        <div style="background-color: #fff">
+            <textarea name="content" id="text-editor" class="form-control">{{ article.ArticleData.Content }}</textarea>      
+        </div>          
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary pull-right" onclick="save_data()">添加</button>
+    </div>
+<script src="/static/js/jquery.min.js"></script>
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+<script>
+    var editorIndex = null;
+    var layedit = layui.layedit;
+    layui.use("layedit", function(){        
+        editorIndex = layedit.build("text-editor", {
+            height:450,
+            uploadImage:{
+                url:"/attachment/upload",
+                type:"post"
+            }
+        });
+    })
+
+    function save_data(){
+        layedit.sync(editorIndex);
+        var formdata = new FormData();
+        // id title category_name keywords description content
+        var content = document.getElementById("text-editor").value;
+        var title = document.getElementById("title").value;
+        var category_name = document.getElementById("category_name").value;
+        var keywords = document.getElementById("keywords").value;
+        var description = document.getElementById("description").value;
+        var id = document.getElementById("id").value;
+        formdata.append("title", title);
+        formdata.append("category_name", category_name);
+        formdata.append("keywords", keywords);
+        formdata.append("description", description);
+        formdata.append("id", id);
+        formdata.append("content", content);
+        var xhr = new XMLHttpRequest();
+        xhr.open("post", "");
+        xhr.onreadystatechange = function(){
+            if (this.readyState == 4) {
+                console.log(xhr.responseText);
+                if (this.status == 200) {
+                    var obj = JSON.parse(xhr.responseText);
+                    if (obj.code == 0){
+                        document.getElementById("errors").innerHTML = '<p class="bg-danger" style="padding:10px">发布成功</p>';
+                    } else{
+                        document.getElementById("errors").innerHTML = '<p class="bg-danger" style="padding:10px">'+obj.msg+'</p>';
+                    }
+                } else {
+                }
+            }
+        }
+        xhr.send(formdata);
+    }
+</script>
+
+{% endblock %}
